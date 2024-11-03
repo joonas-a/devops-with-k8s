@@ -25,6 +25,10 @@ dependencies:
   - text
   - extra
   - time
+  - warp
+  - wai
+  - bytestring
+  - http-types
 
 ghc-options:
   - -Wall
