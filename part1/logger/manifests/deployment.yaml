@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logger-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      volumes:
+        - name: shared-image
+          emptyDir: {}
+      containers:
+        - name: logs-writer
+          image: joonasahovalli/logs-writer:1.0.0
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+        - name: logs-reader
+          image: joonasahovalli/logs-reader:1.0.0
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
