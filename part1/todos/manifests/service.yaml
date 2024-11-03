@@ -3,12 +3,10 @@ kind: Service
 metadata:
   name: todos-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: todos
   ports:
-    - name: http
-      nodePort: 30080
+    - port: 30080
       protocol: TCP
-      port: 1234
       targetPort: 3000
