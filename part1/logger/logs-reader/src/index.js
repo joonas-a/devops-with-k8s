@@ -9,13 +9,15 @@ const port = process.env.PORT || 2341;
 
 const dir = path.join('/', 'usr', 'src', 'app', 'files');
 const filepath = path.join(dir, 'logs.txt');
+const pongpath = path.join(dir, 'pong.txt');
 
 const hash = uuidv4();
 
 app.use(async (ctx) => {
   try {
     const time = await fs.readFile(filepath, 'utf8');
-    ctx.body = `${time} ${hash}`;
+    const pongs = await fs.readFile(pongpath, 'utf8');
+    ctx.body = `${time} ${hash} \nPing / Pongs: ${pongs}`;
   } catch (err) {
     console.error('FAILED TO READ FILE', err);
     ctx.status = 500;

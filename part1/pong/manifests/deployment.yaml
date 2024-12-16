@@ -12,6 +12,13 @@ spec:
       labels:
         app: pong
     spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: logger-claim
       containers:
         - name: pong
-          image: joonasahovalli/pong:1.0.0
+          image: joonasahovalli/pong:1.0.4
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
