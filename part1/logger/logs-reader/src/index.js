@@ -9,7 +9,7 @@ const app = new Koa();
 
 const port = process.env.PORT || 2341;
 
-// Path for local testing
+// Path for local testing (remember to uncomment)
 // const dir = path.join(__dirname, 'files');
 const dir = path.join('/', 'usr', 'src', 'app', 'files');
 
@@ -48,6 +48,16 @@ const imageOlderThanHour = async () => {
   }
 };
 
+const dummyTodos = [
+  { id: 1, text: 'TODO 1' },
+  { id: 2, text: 'TODO 2' },
+  { id: 3, text: 'TODO 3' },
+];
+
+const todoHtml = dummyTodos
+  .map((todo) => `<li id=${todo.id.toString()}>${todo.text}</li>`)
+  .join('');
+
 app.use(async (ctx) => {
   try {
     const shouldRenew = await imageOlderThanHour();
@@ -66,6 +76,10 @@ app.use(async (ctx) => {
         <p>${time} ${hash}</p>
         <p>Ping / Pongs: ${pongs}</p>
         <img src="data:image/jpeg;base64,${base64Image}">
+        <br>
+        <input type="text" id="text">
+        <input type="button" value="Create TODO"">
+        <ul>${todoHtml}</ul>
       </body>
       </html>
     `;
