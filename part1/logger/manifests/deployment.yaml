@@ -18,12 +18,12 @@ spec:
             claimName: logger-claim
       containers:
         - name: logs-writer
-          image: joonasahovalli/logs-writer:1.0.0
+          image: joonasahovalli/logs-writer:1.0.2
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: logs-reader
-          image: joonasahovalli/logs-reader:1.0.1
+          image: joonasahovalli/logs-reader:1.0.4
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
