@@ -23,7 +23,7 @@ spec:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: logs-reader
-          image: joonasahovalli/logs-reader:1.0.5
+          image: joonasahovalli/logs-reader:1.1.0
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files

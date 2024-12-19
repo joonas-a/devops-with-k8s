@@ -12,6 +12,13 @@ spec:
       labels:
         app: todos
     spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: logger-claim
       containers:
         - name: todos
-          image: joonasahovalli/todos:0.2
+          image: joonasahovalli/todos:1.0.0
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
