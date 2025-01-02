@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todos-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todos
+  template:
+    metadata:
+      labels:
+        app: todos
+    spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: logger-claim
+      containers:
+        - name: todos
+          image: joonasahovalli/todos:1.0.1
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+        - name: todo-backend
+          image: joonasahovalli/todo-backend:1.0.0
+          ports:
+            - containerPort: 3001
