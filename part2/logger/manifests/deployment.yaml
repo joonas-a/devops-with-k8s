@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: logger-dep
+  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -15,7 +16,7 @@ spec:
       volumes:
         - name: shared-image
           persistentVolumeClaim:
-            claimName: logger-claim
+            claimName: exercise-claim
       containers:
         - name: logs-writer
           image: joonasahovalli/logs-writer:1.0.2
