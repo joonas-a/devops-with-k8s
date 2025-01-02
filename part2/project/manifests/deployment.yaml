@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todos-dep
+  namespace: project
 spec:
   replicas: 1
   selector:
@@ -15,7 +16,7 @@ spec:
       volumes:
         - name: shared-image
           persistentVolumeClaim:
-            claimName: logger-claim
+            claimName: project-claim
       containers:
         - name: todos
           image: joonasahovalli/todos:1.0.1
