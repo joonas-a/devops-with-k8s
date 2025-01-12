@@ -24,6 +24,9 @@ spec:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: todo-backend
-          image: joonasahovalli/todo-backend:1.0.0
+          image: joonasahovalli/todo-backend:1.0.1
           ports:
             - containerPort: 3001
+          envFrom:
+            - secretRef:
+                name: psql-credentials
