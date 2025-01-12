@@ -1,56 +1,82 @@
-const fs = require('fs').promises;
 const Koa = require('koa');
-const path = require('path');
+const { Client } = require('pg');
+const createRouter = require('./router');
 
 const app = new Koa();
-const pongApi = require('./router');
-
 const port = process.env.PORT || 3001;
 
-const dir = path.join('/', 'usr', 'src', 'app', 'files');
-// const dir = path.join(__dirname, 'files');
-
-const filepath = path.join(dir, 'pong.txt');
-
-// Handle reguests to /api
-app.use(pongApi.routes());
-app.use(pongApi.allowedMethods());
-
-// Handle requests to /
-app.use(async (ctx, next) => {
-  try {
-    let data;
-
+// Psql connection
+let client;
+let connected = false;
+const connectToDb = async () => {
+  while (!connected) {
+    client = new Client({
+      host: 'psql-svc',
+      port: 5432,
+      user: process.env.POSTGRES_USER,
+      database: process.env.POSTGRES_DB,
+      password: process.env.POSTGRES_PASSWORD,
+    });
     try {
-      data = await fs.readFile(filepath, 'utf8');
+      await client.connect();
+      console.log('Connected to psql');
+      connected = true;
+      break;
     } catch (err) {
-      if (err.code === 'ENOENT') {
-        data = '0';
-        await fs.writeFile(filepath, data);
-      } else {
-        throw err;
-      }
+      console.error('Connection error', err);
+      console.log('Retrying in 5 seconds...');
+      await new Promise((resolve) => setTimeout(resolve, 5000));
     }
-
-    let counter = parseInt(data, 10);
-    counter += 1;
-
-    await fs.writeFile(filepath, counter.toString());
-  } catch (err) {
-    console.error(err);
   }
-  await next();
-});
+};
 
-app.use(async (ctx) => {
+const init_db = async () => {
   try {
-    const counter = await fs.readFile(filepath, 'utf8');
-    ctx.body = `pong ${counter}`;
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS Counter (
+        id SERIAL PRIMARY KEY,
+        value INTEGER DEFAULT 0
+      );
+      INSERT INTO Counter (value) VALUES (0)
+      ON CONFLICT DO NOTHING;
+    `);
+    console.log('Initialized database');
   } catch (err) {
-    console.error(err);
+    console.error('Error initializing database', err);
   }
-});
+};
 
-app.listen(port, () => {
-  console.log(`Server started in port ${port}`);
-});
+const startServer = async () => {
+  await connectToDb();
+  await init_db();
+
+  const pongApi = createRouter(client);
+
+  // Handle reguests to /api
+  app.use(pongApi.routes());
+  app.use(pongApi.allowedMethods());
+
+  // Handle requests to /
+  app.use(async (ctx) => {
+    try {
+      const res = await client.query('SELECT value FROM Counter LIMIT 1');
+      let counter = res.rows[0] ? parseInt(res.rows[0].value, 10) : 0;
+      counter += 1;
+      await client.query('UPDATE Counter SET value = $1 WHERE id = 1', [
+        counter,
+      ]);
+
+      ctx.body = `pong ${counter}`;
+    } catch (err) {
+      console.error('Caught error when working with db: ', err);
+      ctx.status = 500;
+      ctx.body = 'Internal Server Error';
+    }
+  });
+
+  app.listen(port, () => {
+    console.log(`Server started in port ${port}`);
+  });
+};
+
+startServer();

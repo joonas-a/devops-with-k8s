@@ -1,33 +1,18 @@
 const Router = require('koa-router');
-const fs = require('fs').promises;
-const path = require('path');
-
 const router = new Router({ prefix: '/api' });
 
-const pongPath = path.join('/', 'usr', 'src', 'app', 'files', 'pong.txt');
-// const pongPath = path.join(__dirname, 'files', 'pong.txt');
-
-const pongs = () => {
-  return new Promise((resolve, _reject) => {
-    fs.readFile(pongPath, 'utf8')
-      .then((data) => {
-        resolve(parseInt(data, 10));
-      })
-      .catch((err) => {
-        console.error(err);
-        // resolve 0 if file does not exist
-        resolve(0);
-      });
+module.exports = (client) => {
+  router.get('/', async (ctx) => {
+    try {
+      const res = await client.query('SELECT value FROM Counter LIMIT 1');
+      const counter = res.rows[0] ? parseInt(res.rows[0].value, 10) : 0;
+      ctx.body = `${counter}`;
+    } catch (err) {
+      console.error(err);
+      ctx.status = 500;
+      ctx.body = 'Internal Server Error';
+    }
   });
+
+  return router;
 };
-
-router.get('/', async (ctx) => {
-  try {
-    const counter = await pongs();
-    ctx.body = `${counter}`;
-  } catch (err) {
-    console.error(err);
-  }
-});
-
-module.exports = router;

@@ -19,7 +19,13 @@ spec:
             claimName: exercise-claim
       containers:
         - name: pong
-          image: joonasahovalli/pong:2.0.0
+          image: joonasahovalli/pong:2.0.7
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
+          env:
+            - name: POSTGRES_DB
+              value: pongdb
+          envFrom:
+            - secretRef:
+                name: psql-credentials
