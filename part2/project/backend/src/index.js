@@ -99,6 +99,7 @@ const startServer = async () => {
       const result = await fetchTodos();
       ctx.body = result;
     } else if (ctx.method == 'POST') {
+      console.log('Received form submission:', ctx.request.body);
       const { text } = ctx.request.body;
       if (!text) {
         ctx.status = 400;
@@ -112,6 +113,7 @@ const startServer = async () => {
 
       const newTodo = await addNewTodo(text);
       if (newTodo) {
+        console.log('Added new todo:', newTodo);
         ctx.status = 201;
         ctx.body = { newTodo };
       }
