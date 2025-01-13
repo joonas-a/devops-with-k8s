@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: project-cronjob
+  namespace: project
+spec:
+  schedule: '0 * * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: project-cronjob
+              image: curlimages/curl:8.11.1
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  curl -w "%{url_effective}\n" -I -L -s -S $WIKI_URL -o /dev/null | xargs -I {} curl -X POST -H "Content-Type: application/json" -d '{"text":"Read {}"}' $TARGET_URL
+              env:
+                - name: WIKI_URL
+                  value: https://en.wikipedia.org/wiki/Special:Random
+                - name: TARGET_URL
+                  value: http://todos-svc:30080/submit-todo
+          restartPolicy: OnFailure
