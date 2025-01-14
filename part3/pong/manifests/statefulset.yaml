@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: psql-stset
+  namespace: exercises
+spec:
+  serviceName: psql-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: psqlapp
+  template:
+    metadata:
+      labels:
+        app: psqlapp
+    spec:
+      containers:
+        - name: psql
+          image: postgres:17.2
+          ports:
+            - name: psqlport
+              containerPort: 5432
+          volumeMounts:
+            - name: psql-data-storage
+              mountPath: /data
+              subPath: postgres
+          env:
+            - name: POSTGRES_DB
+              value: pongdb
+          envFrom:
+            - secretRef:
+                name: psql-credentials
+  volumeClaimTemplates:
+    - metadata:
+        name: psql-data-storage
+        namespace: exercises
+      spec:
+        accessModes: ['ReadWriteOnce']
+        resources:
+          requests:
+            storage: 50Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: psql-svc
+  namespace: exercises
+  labels:
+    app: psqlapp
+spec:
+  ports:
+    - port: 5432
+      name: psqlport
+  clusterIP: None
+  selector:
+    app: psqlapp
