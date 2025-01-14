@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pong-svc
+  name: logger-svc
   namespace: exercises
 spec:
   type: NodePort
   selector:
-    app: pong
+    app: logger
   ports:
-    - port: 2350
+    - port: 2345
       protocol: TCP
-      targetPort: 3001
+      targetPort: 2341
