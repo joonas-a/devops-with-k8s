@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+images:
+  - name: PROJECT/IMAGE_BACKEND
+    newName: joonasahovalli/todo-backend:1.0.2
+  - name: PROJECT/IMAGE_FRONTEND
+    newName: joonasahovalli/todos:1.0.1
+
+resources:
+  - manifests/deployment.yaml
+  - manifests/service.yaml
+  - manifests/ingress.yaml
+  - manifests/backendservice.yaml
+  - manifests/projectstatefulset.yaml
+  - manifests/cronjob.yaml

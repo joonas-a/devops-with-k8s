@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: projectdb
+  namespace: project
+spec:
+  serviceName: projectdb-svc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: projectdbapp
+  template:
+    metadata:
+      labels:
+        app: projectdbapp
+    spec:
+      containers:
+        - name: project-psql
+          image: postgres:17
+          ports:
+            - name: projectdbport
+              containerPort: 5432
+          volumeMounts:
+            - name: psql-data-storage
+              mountPath: /data
+              subPath: postgres
+          envFrom:
+            - secretRef:
+                name: psql-credentials
+  volumeClaimTemplates:
+    - metadata:
+        name: psql-data-storage
+        namespace: project
+      spec:
+        accessModes: ['ReadWriteMany']
+        resources:
+          requests:
+            storage: 100Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: projectdb-svc
+  namespace: project
+  labels:
+    app: projectdbapp
+spec:
+  ports:
+    - port: 5432
+      name: projectdbport
+  clusterIP: None
+  selector:
+    app: projectdbapp
