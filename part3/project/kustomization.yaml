@@ -3,9 +3,9 @@ kind: Kustomization
 
 images:
   - name: PROJECT/IMAGE_BACKEND
-    newName: joonasahovalli/todo-backend:1.0.2
+    newName: joonasahovalli/todo-backend
   - name: PROJECT/IMAGE_FRONTEND
-    newName: joonasahovalli/todos:1.0.1
+    newName: joonasahovalli/todos
 
 resources:
   - manifests/deployment.yaml
