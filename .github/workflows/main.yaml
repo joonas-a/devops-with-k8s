@@ -14,6 +14,10 @@ env:
   SERVICE: dwk-environments
   BRANCH: ${{ github.ref_name }}
 
+defaults:
+  run:
+    working-directory: part3/project
+
 jobs:
   build-publish-deploy:
     name: Build, Publish and Deploy
