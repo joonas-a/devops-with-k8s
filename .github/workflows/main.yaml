@@ -2,8 +2,6 @@ name: Release application
 
 on:
   push:
-    branches:
-      - main
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
@@ -71,9 +69,24 @@ jobs:
       - name: Deploy
         run: |-
 
-          kustomize edit set image PROJECT/IMAGE_BACKEND=gcr.io/$PROJECT_ID/$IMAGE_BACKEND:$BRANCH-$GITHUB_SHA
-          kustomize edit set image PROJECT/IMAGE_FRONTEND=gcr.io/$PROJECT_ID/$IMAGE_FRONTEND:$BRANCH-$GITHUB_SHA
+          if [ "${{ github.ref }}" = "refs/heads/main" ]
+          then
+            
+            kubectl config set-context --current --namespace=default
+            kustomize edit set namespace default
+
+          else
+            
+            kubectl create namespace ${GITHUB_REF#refs/heads/} || true
+            kubectl config set-context --current --namespace=${GITHUB_REF#refs/heads/}
+            
+            kustomize edit set namespace ${GITHUB_REF#refs/heads/}
+
+          fi
+
+          kustomize edit set image PROJECT/IMAGE_BACKEND=gcr.io/$PROJECT_ID/$IMAGE_BACKEND:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
+          kustomize edit set image PROJECT/IMAGE_FRONTEND=gcr.io/$PROJECT_ID/$IMAGE_FRONTEND:${GITHUB_REF#refs/heads/}-$GITHUB_SHA
 
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/$DEPLOYMENT -n project
+          kubectl rollout status deployment/$DEPLOYMENT
           kubectl get services -o wide
