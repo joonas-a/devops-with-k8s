@@ -10,7 +10,7 @@ env:
   IMAGE_BACKEND: todo-backend
   IMAGE_FRONTEND: todos
   DEPLOYMENT: todos-dep
-  BRANCH: ${{ github.ref_name }}
+  BRANCH: ${{ github.event.ref }}
 
 jobs:
   on-branch-deletion:
@@ -35,6 +35,9 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER }}
           project_id: ${{ env.PROJECT_ID }}
           location: ${{ env.GKE_ZONE }}
+
+      - name: (Debug) Show branch name
+        run: echo $BRANCH
 
       - name: Delete everything from selected namespace
         run: kubectl delete namespace $BRANCH
