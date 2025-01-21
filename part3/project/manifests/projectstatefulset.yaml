@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: projectdb
+  namespace: project
 spec:
   serviceName: projectdb-svc
   replicas: 1
@@ -31,7 +32,7 @@ spec:
         name: psql-data-storage
         namespace: project
       spec:
-        accessModes: ['ReadWriteMany']
+        accessModes: ['ReadWriteOnce']
         resources:
           requests:
             storage: 100Mi
