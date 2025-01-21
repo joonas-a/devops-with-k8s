@@ -51,9 +51,9 @@ jobs:
         uses: mdgreenwald/mozilla-sops-action@v1.6.0
 
       - name: Decrypt secrets
-        run: |-
-          echo "${{ secrets.SOPS_AGE_KEY }}" > key
-          sops --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        run: sops --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        env:
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 
       - name: Build images
         run: |-
