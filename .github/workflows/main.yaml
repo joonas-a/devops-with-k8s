@@ -53,7 +53,7 @@ jobs:
       - name: Decrypt secrets
         run: |-
           echo "${{ secrets.SOPS_AGE_KEY }}" > key
-          sops --decrypt --pgp key ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+          sops --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
 
       - name: Build images
         run: |-
