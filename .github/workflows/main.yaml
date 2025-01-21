@@ -10,7 +10,7 @@ env:
   GKE_CLUSTER: dwk-cluster
   GKE_ZONE: europe-north1-c
   IMAGE_BACKEND: todo-backend
-  IMAGE_FRONTEND: todo-frontend
+  IMAGE_FRONTEND: todos
   DEPLOYMENT: todos-dep
   BRANCH: ${{ github.ref_name }}
 
