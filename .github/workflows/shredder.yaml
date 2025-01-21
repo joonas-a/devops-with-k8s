@@ -12,10 +12,6 @@ env:
   DEPLOYMENT: todos-dep
   BRANCH: ${{ github.ref_name }}
 
-defaults:
-  run:
-    working-directory: part3/project
-
 jobs:
   on-branch-deletion:
     if: github.ref_type == 'branch'
