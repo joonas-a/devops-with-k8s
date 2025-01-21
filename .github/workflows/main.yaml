@@ -47,6 +47,14 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
           location: ${{ env.GKE_ZONE }}
 
+      - name: Sops Binary Installer
+        uses: mdgreenwald/mozilla-sops-action@v1.6.0
+
+      - name: Decrypt secrets
+        run: |-
+          echo "${{ secrets.SOPS_AGE_KEY }}" > key
+          sops --decrypt --pgp key ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+
       - name: Build images
         run: |-
           docker build -t "gcr.io/$PROJECT_ID/$IMAGE_BACKEND:$BRANCH-GITHUB_SHA" ./backend
