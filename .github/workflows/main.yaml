@@ -62,6 +62,7 @@ jobs:
 
       - name: Deploy
         run: |-
+
           kustomize edit set image PROJECT/BACKEND=gcr.io/$PROJECT_ID/$IMAGE_BACKEND:$BRANCH-GITHUB_SHA
           kustomize edit set image PROJECT/FRONTEND=gcr.io/$PROJECT_ID/$IMAGE_FRONTEND:$BRANCH-GITHUB_SHA
 
