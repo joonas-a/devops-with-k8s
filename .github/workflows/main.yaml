@@ -45,7 +45,9 @@ jobs:
         uses: mdgreenwald/mozilla-sops-action@v1.6.0
 
       - name: Decrypt secrets
-        run: sops --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+        run: |-
+          sops --decrypt ./manifests/secret.enc.yaml > ./manifests/secret.yaml
+          sops --decrypt ./manifests/googlesecret.enc.yaml > ./manifests/googlesecret.yaml
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
 

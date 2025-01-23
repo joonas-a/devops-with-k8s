@@ -16,3 +16,5 @@ resources:
   - manifests/cronjob.yaml
   - manifests/persistentvolumeclaim.yaml
   - manifests/secret.yaml
+  - manifests/backupcronjob.yaml
+  - manifests/googlesecret.yaml
