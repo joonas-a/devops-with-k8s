@@ -23,11 +23,25 @@ spec:
       containers:
         - name: logs-writer
           image: joonasahovalli/logs-writer:1.1.0
+          resources:
+            requests:
+              cpu: '10m'
+              memory: '10Ki'
+            limits:
+              cpu: '50m'
+              memory: '32Mi'
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: logs-reader
           image: joonasahovalli/logs-reader:2.1.0
+          resources:
+            requests:
+              cpu: '10m'
+              memory: '10Ki'
+            limits:
+              cpu: '50m'
+              memory: '64Mi'
           env:
             - name: MESSAGE
               valueFrom:

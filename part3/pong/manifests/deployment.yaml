@@ -16,6 +16,13 @@ spec:
       containers:
         - name: pong
           image: joonasahovalli/pong:2.0.8
+          resources:
+            requests:
+              cpu: '10m'
+              memory: '10Ki'
+            limits:
+              cpu: '50m'
+              memory: '64Mi'
           env:
             - name: POSTGRES_DB
               value: pongdb
