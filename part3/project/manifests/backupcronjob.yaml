@@ -2,7 +2,6 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: psql-backup-cron
-  namespace: project
 spec:
   schedule: '0 3 * * *'
   jobTemplate:

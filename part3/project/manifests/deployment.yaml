@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: todos-dep
-  namespace: project
 spec:
   replicas: 1
   strategy:
@@ -22,6 +21,13 @@ spec:
       containers:
         - name: todos
           image: PROJECT/IMAGE_FRONTEND
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '10Ki'
+            limits:
+              cpu: '200m'
+              memory: '128Mi'
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
@@ -32,3 +38,10 @@ spec:
           envFrom:
             - secretRef:
                 name: psql-credentials
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '10Ki'
+            limits:
+              cpu: '150m'
+              memory: '64Mi'
