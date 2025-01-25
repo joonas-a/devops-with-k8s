@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logger-dep
+  namespace: exercises
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logger
+  template:
+    metadata:
+      labels:
+        app: logger
+    spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: exercise-claim
+        - name: config-volume
+          configMap:
+            name: logger-configmap
+      containers:
+        - name: logs-writer
+          image: joonasahovalli/logs-writer:1.1.0
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+        - name: logs-reader
+          image: joonasahovalli/logs-reader:2.1.0
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            exec:
+              command:
+                - sh
+                - -c
+                - ping -c 1 psql-svc || exit 1
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-configmap
+                  key: MESSAGE
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+            - name: config-volume
+              mountPath: /usr/src/app/config

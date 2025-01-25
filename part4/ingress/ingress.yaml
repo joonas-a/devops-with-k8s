@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: exercise-nginx-ing
+spec:
+  # ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /logger
+            pathType: Prefix
+            backend:
+              service:
+                name: logger-svc
+                port:
+                  number: 2345
+          - path: /pingpong
+            pathType: Prefix
+            backend:
+              service:
+                name: pong-svc
+                port:
+                  number: 2350
