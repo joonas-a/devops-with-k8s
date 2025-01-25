@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todos-dep
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: todos
+  template:
+    metadata:
+      labels:
+        app: todos
+    spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: project-claim
+      containers:
+        - name: todos
+          image: PROJECT/IMAGE_FRONTEND
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+        - name: todo-backend
+          image: PROJECT/IMAGE_BACKEND
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3001
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - secretRef:
+                name: psql-credentials
