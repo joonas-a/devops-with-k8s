@@ -27,15 +27,13 @@ spec:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: logs-reader
-          image: joonasahovalli/logs-reader:2.1.0
+          image: joonasahovalli/logs-reader:3.0.0
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5
-            exec:
-              command:
-                - sh
-                - -c
-                - ping -c 1 psql-svc || exit 1
+            httpGet:
+              path: /healthz
+              port: 2341
           env:
             - name: MESSAGE
               valueFrom:

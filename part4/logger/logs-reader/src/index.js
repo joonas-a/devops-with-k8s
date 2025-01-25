@@ -17,6 +17,27 @@ const configpath = path.join(configDir, 'information.txt');
 
 const hash = uuidv4();
 
+app.use(async (ctx, next) => {
+  if (ctx.path === '/healthz') {
+    try {
+      const response = await axios.get('http://pong-svc:2350/api');
+      if (response.status === 200) {
+        ctx.status = 200;
+        ctx.body = 'Pong service is ready';
+      } else {
+        ctx.status = 500;
+        ctx.body = 'Pong service is not ready';
+      }
+    } catch (err) {
+      console.error('Failed to reach pong-svc', err);
+      ctx.status = 500;
+      ctx.body = 'Pong service is not ready';
+    }
+  } else {
+    await next();
+  }
+});
+
 app.use(async (ctx) => {
   try {
     const time = await fs.readFile(filepath, 'utf8');
