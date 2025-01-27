@@ -13,7 +13,6 @@ images:
 resources:
   # Deployments + templates
   - manifests/rollout.yaml
-  - manifests/broadcasterrollout.yaml
   - manifests/analysistemplate.yaml
   # Services + ingresses
   - manifests/service.yaml
@@ -27,4 +26,9 @@ resources:
   - manifests/persistentvolumeclaim.yaml
   # Secrets
   - manifests/secret.yaml
-  - manifests/webhooksecret.yaml
+
+  # Disabled for now
+  # - manifests/broadcasterrollout.yaml
+  # - manifestts/backupcronjob.yaml
+  # - manifests/googlesecret.yaml
+  # - manifests/webhooksecret.yaml
