@@ -62,3 +62,6 @@ spec:
           envFrom:
             - secretRef:
                 name: psql-credentials
+          env:
+            - name: NATS_URL
+              value: nats://my-nats.project.svc.cluster.local:4222

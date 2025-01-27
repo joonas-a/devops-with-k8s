@@ -4,18 +4,27 @@ namespace: project
 
 images:
   - name: PROJECT/IMAGE_BACKEND
-    newName: joonasahovalli/todo-backend:2.0.2
+    newName: joonasahovalli/todo-backend:2.1.2
   - name: PROJECT/IMAGE_FRONTEND
     newName: joonasahovalli/todos:2.0.5
+  - name: PROJECT/IMAGE_BROADCASTER
+    newName: joonasahovalli/broadcaster:1.1.0
 
 resources:
+  # Deployments + templates
   - manifests/rollout.yaml
-  - manifests/service.yaml
-  - manifests/ingress.yaml
-  - manifests/backendservice.yaml
-  - manifests/projectstatefulset.yaml
-  - manifests/cronjob.yaml
-  - manifests/persistentvolumeclaim.yaml
-  - manifests/secret.yaml
-  - manifests/backupcronjob.yaml
+  - manifests/broadcasterrollout.yaml
   - manifests/analysistemplate.yaml
+  # Services + ingresses
+  - manifests/service.yaml
+  - manifests/backendservice.yaml
+  - manifests/ingress.yaml
+  # StatefulSets
+  - manifests/projectstatefulset.yaml
+  # CronJobs
+  - manifests/cronjob.yaml
+  # PersistentVolumeClaims
+  - manifests/persistentvolumeclaim.yaml
+  # Secrets
+  - manifests/secret.yaml
+  - manifests/webhooksecret.yaml

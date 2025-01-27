@@ -15,6 +15,7 @@
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^13.0.1",
+    "nats": "^2.29.1",
     "node-pg-migrate": "^7.9.0",
     "pg": "^8.13.1"
   }

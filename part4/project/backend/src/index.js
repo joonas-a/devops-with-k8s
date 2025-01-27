@@ -3,6 +3,7 @@ const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const { Client } = require('pg');
 const { default: migrate } = require('node-pg-migrate');
+const { connect, StringCodec } = require('nats');
 
 const app = new Koa();
 const router = new Router();
@@ -127,6 +128,10 @@ const startServer = async () => {
   await init_db();
   await runMigrations();
 
+  // Establish NATS connection
+  const nc = await connect({ servers: process.env.NATS_URL });
+  const sc = StringCodec();
+
   router.get('/healthz', async (ctx) => {
     try {
       await client.query('SELECT 1');
@@ -144,6 +149,7 @@ const startServer = async () => {
     const { id } = ctx.params;
     const res = await setDone(id);
     if (res) {
+      nc.publish('todos', sc.encode(`Todo completed: ${res.text}`));
       ctx.status = 200;
       ctx.body = res;
     } else {
@@ -172,7 +178,13 @@ const startServer = async () => {
 
       const newTodo = await addNewTodo(text);
       if (newTodo) {
-        console.log('');
+        // Publish to NATS
+        nc.publish(
+          'todos',
+          sc.encode(
+            JSON.stringify({ message: 'New todo added', todo: newTodo })
+          )
+        );
         ctx.status = 201;
         ctx.body = { newTodo };
       }
