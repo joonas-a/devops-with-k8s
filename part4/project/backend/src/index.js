@@ -2,6 +2,7 @@ const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
 const { Client } = require('pg');
+const { default: migrate } = require('node-pg-migrate');
 
 const app = new Koa();
 const router = new Router();
@@ -41,6 +42,25 @@ const connectToDb = async () => {
   }
 };
 
+const runMigrations = async () => {
+  try {
+    await migrate({
+      databaseUrl: {
+        host: process.env.POSTGRES_HOST,
+        port: process.env.POSTGRES_PORT,
+        user: process.env.POSTGRES_USER,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+      },
+      dir: 'migrations',
+      direction: 'up',
+    });
+    console.log('Migrations applied');
+  } catch (err) {
+    console.error('Error applying migrations', err);
+  }
+};
+
 const init_db = async () => {
   try {
     await client.query(`
@@ -74,6 +94,19 @@ const fetchTodos = async () => {
   }
 };
 
+const setDone = async (todoId) => {
+  try {
+    const result = await client.query(
+      'UPDATE Todos SET completed = TRUE where id = $1 RETURNING *',
+      [todoId]
+    );
+    return result.rows[0];
+  } catch (err) {
+    console.error("Couldn't update todo status.", err);
+    return null;
+  }
+};
+
 const addNewTodo = async (text) => {
   try {
     const result = await client.query(
@@ -92,6 +125,7 @@ app.use(bodyParser());
 const startServer = async () => {
   await connectToDb();
   await init_db();
+  await runMigrations();
 
   router.get('/healthz', async (ctx) => {
     try {
@@ -102,6 +136,19 @@ const startServer = async () => {
       console.error(err);
       ctx.status = 500;
       ctx.body = 'project db is not operational';
+    }
+  });
+
+  router.put('/todos/:id', async (ctx) => {
+    console.log('Received PUT request:', ctx.request.body);
+    const { id } = ctx.params;
+    const res = await setDone(id);
+    if (res) {
+      ctx.status = 200;
+      ctx.body = res;
+    } else {
+      ctx.status = 404;
+      ctx.body = 'Todo not found';
     }
   });
 

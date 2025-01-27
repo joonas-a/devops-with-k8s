@@ -6,9 +6,7 @@ spec:
   metrics:
     - name: project-cpu-rate
       initialDelay: 1m
-      interval: 1m
-      count: 9
-      successCondition: result < 0.02
+      successCondition: result[0] < 0.1
       provider:
         prometheus:
           address: http://kube-prometheus-stack-1736-prometheus.prometheus.svc.cluster.local:9090

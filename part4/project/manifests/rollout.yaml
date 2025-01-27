@@ -15,7 +15,7 @@ spec:
             templates:
               - templateName: project-cpu-rate
         - pause:
-            duration: 600s
+            duration: 70s
   template:
     metadata:
       labels:

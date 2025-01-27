@@ -1,3 +1,4 @@
 key.txt
 **secret.yaml
 .venv
+**/node_modules

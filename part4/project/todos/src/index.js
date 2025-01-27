@@ -46,8 +46,28 @@ const imageOlderThanHour = async () => {
 const todoToHtml = (todos) => {
   console.log('todos:', todos);
   return todos
-    .map((todo) => `<li id=${todo.id.toString()}>${todo.text}</li>`)
+    .map(
+      (todo) =>
+        `<li id=${todo.id.toString()} onclick="handleTodoUpdate(${todo.id})">${
+          todo.text
+        }</li>`
+    )
     .join('');
+};
+
+const todoDataParser = (todos) => {
+  console.log(todos[0]);
+  return todos.reduce(
+    (acc, item) => {
+      if (item.completed == true) {
+        acc[0].push(item);
+      } else {
+        acc[1].push(item);
+      }
+      return acc;
+    },
+    [[], []]
+  );
 };
 
 const handleFormSubmission = async (text) => {
@@ -56,6 +76,18 @@ const handleFormSubmission = async (text) => {
       text,
     });
     return response.status === 201;
+  } catch (e) {
+    console.error('Failed to submit form', e);
+    return false;
+  }
+};
+
+const handleTodoCompletion = async (id) => {
+  try {
+    const response = await axios.put(
+      `http://localhost:${backendPort}/todos/${id}`
+    );
+    return response.status === 200;
   } catch (e) {
     console.error('Failed to submit form', e);
     return false;
@@ -96,12 +128,22 @@ app.use(async (ctx) => {
     return;
   }
 
+  if (ctx.method === 'PUT' && ctx.path.startsWith('/todos/')) {
+    const id = ctx.path.split('/').pop();
+    console.log('Received update request:', ctx.request.body);
+    const success = await handleTodoCompletion(id);
+    ctx.status = success ? 200 : 500;
+    return;
+  }
+
   try {
     const shouldRenew = await imageOlderThanHour();
     shouldRenew && (await imageFetcher());
     const base64Image = await fs.readFile(imagepath, 'base64');
     const response = await axios.get(`http://localhost:${backendPort}/`);
-    const todos = todoToHtml(response.data);
+    const [finished, unfinished] = todoDataParser(response.data);
+    const todosUnfinished = todoToHtml(unfinished);
+    const todosFinished = todoToHtml(finished);
     ctx.type = 'html';
     ctx.body = `
       <!DOCTYPE html>
@@ -116,7 +158,10 @@ app.use(async (ctx) => {
           <input type="text" id="todo-text" required>
           <input type="submit" value="Create TODO"">
         </form>
-        <ul>${todos}</ul>
+        <p>Todos</p>
+        <ul>${todosUnfinished}</ul>
+        <p>Finished todos</p>
+        <ul>${todosFinished}</ul>
 
         <script>
           document.getElementById('todo-form').addEventListener('submit', async (e) => {
@@ -136,6 +181,27 @@ app.use(async (ctx) => {
               }
             }
           });
+
+          window.handleTodoUpdate = async (id) => {
+            try {
+              console.log('Click');
+              const response = await fetch(\`/todos/\${id}\`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              });
+
+              if (response.ok) {
+                location.reload();
+              } else {
+                console.error('Failed to update todo');
+              }
+            } catch (error) {
+              console.error('Error:', error);
+            }
+          };
+
         </script>
 
       </body>
