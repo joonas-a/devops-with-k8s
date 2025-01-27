@@ -9,7 +9,7 @@ images:
     newName: joonasahovalli/todos:2.0.0
 
 resources:
-  - manifests/deployment.yaml
+  - manifests/rollout.yaml
   - manifests/service.yaml
   - manifests/ingress.yaml
   - manifests/backendservice.yaml
@@ -18,3 +18,4 @@ resources:
   - manifests/persistentvolumeclaim.yaml
   - manifests/secret.yaml
   - manifests/backupcronjob.yaml
+  - manifests/analysistemplate.yaml
