@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: logger-dep
-  namespace: exercises
 spec:
   replicas: 1
   selector:
@@ -22,12 +21,12 @@ spec:
             name: logger-configmap
       containers:
         - name: logs-writer
-          image: joonasahovalli/logs-writer:1.1.0
+          image: LOGGER/IMAGE_WRITER
           volumeMounts:
             - name: shared-image
               mountPath: /usr/src/app/files
         - name: logs-reader
-          image: joonasahovalli/logs-reader:3.0.0
+          image: LOGGER/IMAGE_READER
           readinessProbe:
             initialDelaySeconds: 10
             periodSeconds: 5

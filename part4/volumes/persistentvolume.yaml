@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: exercise-pv
+spec:
+  storageClassName: exercise-pv
+  capacity:
+    storage: 10Mi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Delete
+  local:
+    path: /tmp/kube
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3d-k3s-default-agent-0

@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# For ex. 4.07
+namespace: exercises
+
+images:
+  - name: PONG/IMAGE_PONG
+    newName: joonasahovalli/pong:2.0.8
+  - name: LOGGER/IMAGE_READER
+    newName: joonasahovalli/logs-reader:3.0.0
+  - name: LOGGER/IMAGE_WRITER
+    newName: joonasahovalli/logs-writer:1.1.0
+
+resources:
+  # Pong
+  - ./pong/manifests/deployment.yaml
+  - ./pong/manifests/service.yaml
+  - ./pong/manifests/statefulset.yaml
+
+  # Logger
+  - ./logger/manifests/deployment.yaml
+  - ./logger/manifests/service.yaml
+  - ./logger/manifests/persistentvolumeclaim.yaml
+  - ./logger/manifests/configmap.yaml
+
+  # Ingress
+  - ./ingress/ingress.yaml
+
+  # Volumes
+  - ./volumes/persistentvolume.yaml
