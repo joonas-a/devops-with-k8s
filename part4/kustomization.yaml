@@ -17,6 +17,7 @@ resources:
   - ./pong/manifests/deployment.yaml
   - ./pong/manifests/service.yaml
   - ./pong/manifests/statefulset.yaml
+  - ./pong/manifests/secret.yaml
 
   # Logger
   - ./logger/manifests/deployment.yaml
