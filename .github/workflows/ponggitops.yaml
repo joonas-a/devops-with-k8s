@@ -40,8 +40,8 @@ jobs:
       - name: Build images
         run: |-
           docker build -t "joonasahovalli/pong:$GITHUB_SHA" ./pong
-          docker build -t "joonasahovalli/logs-reader:$GITHUB_SHA" ./logs/logs-reader
-          docker build -t "joonasahovalli/logs-writer:$GITHUB_SHA" ./logs/logs-writer
+          docker build -t "joonasahovalli/logs-reader:$GITHUB_SHA" ./logger/logs-reader
+          docker build -t "joonasahovalli/logs-writer:$GITHUB_SHA" ./logger/logs-writer
 
       - name: Publish images
         run: |-
