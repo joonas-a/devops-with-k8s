@@ -11,11 +11,3 @@ patches:
       name: staging
 
 namespace: staging
-
-images:
-  - name: PROJECT/IMAGE_BACKEND
-    newName: joonasahovalli/todo-backend:2.1.2
-  - name: PROJECT/IMAGE_FRONTEND
-    newName: joonasahovalli/todos:2.0.5
-  - name: PROJECT/IMAGE_BROADCASTER
-    newName: joonasahovalli/broadcaster:1.1.0
