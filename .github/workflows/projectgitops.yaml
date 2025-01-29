@@ -2,6 +2,8 @@ name: Build and publish application
 
 on:
   push:
+    branches:
+      - main
 
 defaults:
   run:
@@ -15,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -45,6 +49,10 @@ jobs:
             echo "ENV=staging" >> $GITHUB_ENV
           fi
 
+      - name: Create temporary branch to combat detached HEAD
+        run: |
+          git checkout -b temp
+
       - name: Set kustomize images
         run: |-
           if ["$ENV" == "prod"]; then
@@ -68,3 +76,11 @@ jobs:
         with:
           add: 'part4/project/**/kustomization.yaml'
           message: New version released ${{ github.sha }}
+
+      - name: Push changes
+        run: |
+          git push origin temp-branch:main
+
+      - name: Delete temporary branch
+        run: |
+          git push origin --delete temp-branch
