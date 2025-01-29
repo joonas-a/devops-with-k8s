@@ -7,6 +7,7 @@ spec:
     spec:
       containers:
         - name: broadcaster
+          image: PROJECT/IMAGE_BROADCASTER
           env:
             - name: NATS_URL
               value: nats://my-nats.staging.svc.cluster.local:4222

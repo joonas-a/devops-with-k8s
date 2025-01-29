@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+kind:
+  Kustomization
 
   # Deployments + templates
   # Services + ingresses
@@ -7,23 +8,22 @@ kind: Kustomization
   # CronJobs
   # PersistentVolumeClaims
 resources:
-- ./analysistemplate.yaml
-- ./broadcasterrollout.yaml
-- ./rollout.yaml
-- ./backendservice.yaml
-- ./ingress.yaml
-- ./service.yaml
-- ./projectstatefulset.yaml
-- ./cronjob.yaml
-- ./persistentvolumeclaim.yaml
-- ./persistentvolume.yaml
+  - ./broadcasterrollout.yaml
+  - ./rollout.yaml
+  - ./backendservice.yaml
+  - ./ingress.yaml
+  - ./service.yaml
+  - ./projectstatefulset.yaml
+  - ./cronjob.yaml
+  - ./persistentvolumeclaim.yaml
+  - ./persistentvolume.yaml
 images:
-- name: PROJECT/IMAGE_BACKEND
-  newName: joonasahovalli/todo-backend
-  newTag: 67e63fab9c805b4aa63f0434e5e02c2525577fd2
-- name: PROJECT/IMAGE_BROADCASTER
-  newName: joonasahovalli/broadcaster
-  newTag: 67e63fab9c805b4aa63f0434e5e02c2525577fd2
-- name: PROJECT/IMAGE_FRONTEND
-  newName: joonasahovalli/todos
-  newTag: 67e63fab9c805b4aa63f0434e5e02c2525577fd2
+  - name: PROJECT/IMAGE_BACKEND
+    newName: joonasahovalli/todo-backend
+    newTag: b3925c4d28b085b43d589bac0ed70c5afa2b2454
+  - name: PROJECT/IMAGE_BROADCASTER
+    newName: joonasahovalli/broadcaster
+    newTag: b3925c4d28b085b43d589bac0ed70c5afa2b2454
+  - name: PROJECT/IMAGE_FRONTEND
+    newName: joonasahovalli/todos
+    newTag: b3925c4d28b085b43d589bac0ed70c5afa2b2454
