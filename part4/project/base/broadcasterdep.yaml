@@ -1,22 +1,16 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Rollout
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: broadcaster-rollout
+  name: broadcaster-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: broadcaster
-  strategy:
-    canary:
-      steps:
-        - setWeight: 100
-
   template:
     metadata:
       labels:
         app: broadcaster
-
     spec:
       containers:
         - name: broadcaster

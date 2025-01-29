@@ -7,7 +7,6 @@ spec:
     spec:
       containers:
         - name: todo-backend
-          image: PROJECT/IMAGE_BACKEND
           env:
             - name: NATS_URL
               value: nats://my-nats.production.svc.cluster.local:4222

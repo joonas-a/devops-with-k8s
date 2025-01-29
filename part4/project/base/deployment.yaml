@@ -22,6 +22,14 @@ spec:
         - name: todos
           image: PROJECT/IMAGE_FRONTEND
           readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
             httpGet:
               path: /healthz
               port: 3000
@@ -31,9 +39,17 @@ spec:
         - name: todo-backend
           image: PROJECT/IMAGE_BACKEND
           readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
             httpGet:
               path: /healthz
               port: 3001
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
           ports:
             - containerPort: 3001
           envFrom:

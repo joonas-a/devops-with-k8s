@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: project-pv
   capacity:
-    storage: 25Mi
+    storage: 50Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
