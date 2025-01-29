@@ -5,4 +5,4 @@ namespace: staging
 namePrefix: staging-
 
 resources:
-  - ./../base
+  - ./../../base

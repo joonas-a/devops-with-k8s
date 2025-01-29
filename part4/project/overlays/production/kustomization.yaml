@@ -5,4 +5,4 @@ namespace: production
 namePrefix: prod-
 
 resources:
-  - ./../base
+  - ./../../base
