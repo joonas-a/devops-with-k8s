@@ -4,3 +4,7 @@ namespace: staging
 
 resources:
   - ./../../base
+
+patchesStrategicMerge:
+  - staging-backend-patch.yaml
+  - staging-broadcaster-patch.yaml

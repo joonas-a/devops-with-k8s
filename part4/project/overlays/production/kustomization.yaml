@@ -4,3 +4,7 @@ namespace: production
 
 resources:
   - ./../../base
+
+patchesStrategicMerge:
+  - prod-backend-patch.yaml
+  - prod-broadcaster-patch.yaml
