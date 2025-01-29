@@ -88,4 +88,4 @@ jobs:
 
       - name: Delete temporary branch
         run: |
-          git push origin --delete temp-branch
+          git push origin --delete temp
