@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: broadcaster-rollout
+  name: broadcaster-dep
 spec:
   template:
     spec:

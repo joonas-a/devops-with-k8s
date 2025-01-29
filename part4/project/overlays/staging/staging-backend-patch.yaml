@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
-  name: todos-update-dep
+  name: todos-dep
 spec:
   template:
     spec:
