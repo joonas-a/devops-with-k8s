@@ -10,12 +10,8 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 50
-        - analysis:
-            templates:
-              - templateName: project-cpu-rate
-        - pause:
-            duration: 20s
+        - setWeight: 100
+
   template:
     metadata:
       labels:

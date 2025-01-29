@@ -10,16 +10,13 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 50
-        - analysis:
-            templates:
-              - templateName: project-cpu-rate
-        - pause:
-            duration: 50s
+        - setWeight: 100
+
   template:
     metadata:
       labels:
         app: todos
+
     spec:
       volumes:
         - name: shared-image
