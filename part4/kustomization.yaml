@@ -7,13 +7,13 @@ namespace: exercises
 images:
 - name: LOGGER/IMAGE_READER
   newName: joonasahovalli/logs-reader
-  newTag: e589ce8cae4e5e53ed53fc47b9755eeace640f8e
+  newTag: 853ef526270d5b3ff961c4c4dc014b7056840819
 - name: LOGGER/IMAGE_WRITER
   newName: joonasahovalli/logs-writer
-  newTag: e589ce8cae4e5e53ed53fc47b9755eeace640f8e
+  newTag: 853ef526270d5b3ff961c4c4dc014b7056840819
 - name: PONG/IMAGE_PONG
   newName: joonasahovalli/pong
-  newTag: e589ce8cae4e5e53ed53fc47b9755eeace640f8e
+  newTag: 853ef526270d5b3ff961c4c4dc014b7056840819
 
   # Pong
 
