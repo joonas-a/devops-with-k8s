@@ -12,10 +12,10 @@ patchesStrategicMerge:
 images:
 - name: PROJECT/IMAGE_BACKEND
   newName: joonasahovalli/todo-backend
-  newTag: fe266a84d1d3ce63f25f4d6d296f8e5be37f8ea6
+  newTag: 6b5b4a7a99df5d01b178245aeb5a882441c9ec9a
 - name: PROJECT/IMAGE_BROADCASTER
   newName: joonasahovalli/broadcaster
-  newTag: fe266a84d1d3ce63f25f4d6d296f8e5be37f8ea6
+  newTag: 6b5b4a7a99df5d01b178245aeb5a882441c9ec9a
 - name: PROJECT/IMAGE_FRONTEND
   newName: joonasahovalli/todos
-  newTag: fe266a84d1d3ce63f25f4d6d296f8e5be37f8ea6
+  newTag: 6b5b4a7a99df5d01b178245aeb5a882441c9ec9a
