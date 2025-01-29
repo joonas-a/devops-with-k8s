@@ -20,10 +20,10 @@ resources:
 images:
 - name: PROJECT/IMAGE_BACKEND
   newName: joonasahovalli/todo-backend
-  newTag: 65fda5d34025ab15bb2ed5b51c83d34ce0477ff4
+  newTag: 4aec3eb965c1351bb0cee5a2aec4c494a1d9934e
 - name: PROJECT/IMAGE_BROADCASTER
   newName: joonasahovalli/broadcaster
-  newTag: 65fda5d34025ab15bb2ed5b51c83d34ce0477ff4
+  newTag: 4aec3eb965c1351bb0cee5a2aec4c494a1d9934e
 - name: PROJECT/IMAGE_FRONTEND
   newName: joonasahovalli/todos
-  newTag: 65fda5d34025ab15bb2ed5b51c83d34ce0477ff4
+  newTag: 4aec3eb965c1351bb0cee5a2aec4c494a1d9934e
