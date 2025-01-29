@@ -3,7 +3,7 @@ kind: Rollout
 metadata:
   name: todos-update-dep
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: todos
@@ -15,7 +15,7 @@ spec:
             templates:
               - templateName: project-cpu-rate
         - pause:
-            duration: 70s
+            duration: 50s
   template:
     metadata:
       labels:
