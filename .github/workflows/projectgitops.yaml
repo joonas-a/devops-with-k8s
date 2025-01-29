@@ -5,7 +5,7 @@ on:
 
 defaults:
   run:
-    working-directory: part4/project
+    working-directory: part4/project/base
 
 jobs:
   build-publish-deploy:
@@ -24,9 +24,9 @@ jobs:
 
       - name: Build images
         run: |-
-          docker build -t "joonasahovalli/todo-backend:$GITHUB_SHA" ./backend
-          docker build -t "joonasahovalli/todos:$GITHUB_SHA" ./todos
-          docker build -t "joonasahovalli/broadcaster:$GITHUB_SHA" ./broadcaster
+          docker build -t "joonasahovalli/todo-backend:$GITHUB_SHA" ./../backend
+          docker build -t "joonasahovalli/todos:$GITHUB_SHA" ./../todos
+          docker build -t "joonasahovalli/broadcaster:$GITHUB_SHA" ./../broadcaster
 
       - name: Publish images
         run: |-
