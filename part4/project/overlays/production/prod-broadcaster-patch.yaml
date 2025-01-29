@@ -6,7 +6,7 @@ spec:
   template:
     spec:
       containers:
-        - name: broadcaster
+        - name: PROJECT/IMAGE_BROADCASTER
           env:
             - name: NATS_URL
               value: nats://my-nats.production.svc.cluster.local:4222
