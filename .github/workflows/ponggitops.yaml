@@ -28,15 +28,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Sops Binary Installer
-        uses: mdgreenwald/mozilla-sops-action@v1.6.0
-
-      - name: Decrypt secrets
-        run: |-
-          sops --decrypt ./pong/manifests/secret.enc.yaml > ./pong/manifests/secret.yaml
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_KEY }}
-
       - name: Build images
         run: |-
           docker build -t "joonasahovalli/pong:$GITHUB_SHA" ./pong

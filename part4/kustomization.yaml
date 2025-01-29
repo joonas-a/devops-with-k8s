@@ -5,31 +5,30 @@ kind: Kustomization
 namespace: exercises
 
 images:
-- name: LOGGER/IMAGE_READER
-  newName: joonasahovalli/logs-reader
-  newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
-- name: LOGGER/IMAGE_WRITER
-  newName: joonasahovalli/logs-writer
-  newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
-- name: PONG/IMAGE_PONG
-  newName: joonasahovalli/pong
-  newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
+  - name: LOGGER/IMAGE_READER
+    newName: joonasahovalli/logs-reader
+    newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
+  - name: LOGGER/IMAGE_WRITER
+    newName: joonasahovalli/logs-writer
+    newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
+  - name: PONG/IMAGE_PONG
+    newName: joonasahovalli/pong
+    newTag: 2d170f77504190c99d4b1949c0e50095ee37d109
 
+resources:
   # Pong
+  - ./pong/manifests/deployment.yaml
+  - ./pong/manifests/service.yaml
+  - ./pong/manifests/statefulset.yaml
 
   # Logger
+  - ./logger/manifests/deployment.yaml
+  - ./logger/manifests/service.yaml
+  - ./logger/manifests/persistentvolumeclaim.yaml
+  - ./logger/manifests/configmap.yaml
 
   # Ingress
+  - ./ingress/ingress.yaml
 
   # Volumes
-resources:
-- ./pong/manifests/deployment.yaml
-- ./pong/manifests/service.yaml
-- ./pong/manifests/statefulset.yaml
-- ./pong/manifests/secret.yaml
-- ./logger/manifests/deployment.yaml
-- ./logger/manifests/service.yaml
-- ./logger/manifests/persistentvolumeclaim.yaml
-- ./logger/manifests/configmap.yaml
-- ./ingress/ingress.yaml
-- ./volumes/persistentvolume.yaml
+  - ./volumes/persistentvolume.yaml
