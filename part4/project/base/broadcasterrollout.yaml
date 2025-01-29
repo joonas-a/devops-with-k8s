@@ -26,6 +26,6 @@ spec:
                 name: webhook-secret
           env:
             - name: NATS_URL
-              value: nats://my-nats.project.svc.cluster.local:4222
+              value: PLACEHOLDER
             - name: PRODUCTION
               value: 'false'
