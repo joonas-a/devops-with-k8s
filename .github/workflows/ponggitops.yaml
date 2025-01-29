@@ -3,12 +3,6 @@ name: Build and publish application
 on:
   push:
 
-env:
-  IMAGE_BACKEND: todo-backend
-  IMAGE_FRONTEND: todos
-  DEPLOYMENT: todos-dep
-  BRANCH: ${{ github.ref_name }}
-
 defaults:
   run:
     working-directory: part4/
