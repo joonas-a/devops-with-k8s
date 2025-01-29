@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: broadcaster-rollout
+spec:
+  template:
+    spec:
+      containers:
+        - name: broadcaster
+          env:
+            - name: NATS_URL
+              value: nats://my-nats.staging.svc.cluster.local:4222
+            - name: PRODUCTION
+              value: 'false'

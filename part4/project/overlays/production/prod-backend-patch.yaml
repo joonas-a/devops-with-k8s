@@ -1,0 +1,12 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: todos-update-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: todo-backend
+          env:
+            - name: NATS_URL
+              value: nats://my-nats.production.svc.cluster.local:4222

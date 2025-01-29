@@ -27,3 +27,5 @@ spec:
           env:
             - name: NATS_URL
               value: nats://my-nats.project.svc.cluster.local:4222
+            - name: PRODUCTION
+              value: 'false'
