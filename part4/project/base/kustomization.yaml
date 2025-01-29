@@ -1,5 +1,6 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
+kind:
+  Kustomization
 
   # Deployments + templates
   # Services + ingresses
@@ -7,22 +8,12 @@ kind: Kustomization
   # CronJobs
   # PersistentVolumeClaims
 resources:
-- ./deployment.yaml
-- ./broadcasterdep.yaml
-- ./backendservice.yaml
-- ./ingress.yaml
-- ./service.yaml
-- ./projectstatefulset.yaml
-- ./cronjob.yaml
-- ./persistentvolumeclaim.yaml
-- ./persistentvolume.yaml
-images:
-- name: PROJECT/IMAGE_BACKEND
-  newName: joonasahovalli/todo-backend
-  newTag: 68bd0125b58ddb9cb6a1bf6611d6297e715244af
-- name: PROJECT/IMAGE_BROADCASTER
-  newName: joonasahovalli/broadcaster
-  newTag: 68bd0125b58ddb9cb6a1bf6611d6297e715244af
-- name: PROJECT/IMAGE_FRONTEND
-  newName: joonasahovalli/todos
-  newTag: 68bd0125b58ddb9cb6a1bf6611d6297e715244af
+  - ./deployment.yaml
+  - ./broadcasterdep.yaml
+  - ./backendservice.yaml
+  - ./ingress.yaml
+  - ./service.yaml
+  - ./projectstatefulset.yaml
+  - ./cronjob.yaml
+  - ./persistentvolumeclaim.yaml
+  - ./persistentvolume.yaml

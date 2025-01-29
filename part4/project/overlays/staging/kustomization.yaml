@@ -8,3 +8,14 @@ resources:
 patchesStrategicMerge:
   - staging-backend-patch.yaml
   - staging-broadcaster-patch.yaml
+
+images:
+  - name: PROJECT/IMAGE_BACKEND
+    newName: joonasahovalli/todo-backend
+    newTag: 9fedcdf64ed3a68f0ba59a3b322a5445af07ae3b
+  - name: PROJECT/IMAGE_BROADCASTER
+    newName: joonasahovalli/broadcaster
+    newTag: 9fedcdf64ed3a68f0ba59a3b322a5445af07ae3b
+  - name: PROJECT/IMAGE_FRONTEND
+    newName: joonasahovalli/todos
+    newTag: 9fedcdf64ed3a68f0ba59a3b322a5445af07ae3b

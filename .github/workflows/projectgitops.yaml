@@ -37,14 +37,34 @@ jobs:
       - name: Set up Kustomize
         uses: imranismail/setup-kustomize@v2.1.0
 
+      - name: Determine if should deploy in prod or staging
+        run: |
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+          else
+            echo "ENV=staging" >> $GITHUB_ENV
+          fi
+
       - name: Set kustomize images
         run: |-
+          if ["$ENV" == "prod"]; then
+
+          cd ./../overlays/production
           kustomize edit set image PROJECT/IMAGE_BACKEND=joonasahovalli/todo-backend:$GITHUB_SHA
           kustomize edit set image PROJECT/IMAGE_FRONTEND=joonasahovalli/todos:$GITHUB_SHA
           kustomize edit set image PROJECT/IMAGE_BROADCASTER=joonasahovalli/broadcaster:$GITHUB_SHA
 
+          else
+
+          cd ./../overlays/staging
+          kustomize edit set image PROJECT/IMAGE_BACKEND=joonasahovalli/todo-backend:$GITHUB_SHA
+          kustomize edit set image PROJECT/IMAGE_FRONTEND=joonasahovalli/todos:$GITHUB_SHA
+          kustomize edit set image PROJECT/IMAGE_BROADCASTER=joonasahovalli/broadcaster:$GITHUB_SHA
+
+          fi
+
       - name: commit kustomization.yaml to GitHub
         uses: EndBug/add-and-commit@v9
         with:
-          add: 'part4/project/base/kustomization.yaml'
+          add: 'part4/project/**/kustomization.yaml'
           message: New version released ${{ github.sha }}
