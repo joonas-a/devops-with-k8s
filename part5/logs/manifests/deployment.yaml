@@ -1,0 +1,24 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: logger-svc
+spec:
+  template:
+    spec:
+      volumes:
+        - name: config-volume
+          configMap:
+            name: logger-configmap
+      containers:
+        - image: LOGGER/IMAGE
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: logger-configmap
+                  key: MESSAGE
+          volumeMounts:
+            - name: config-volume
+              mountPath: /usr/src/app/config

@@ -1,0 +1,17 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: pong-svc
+spec:
+  template:
+    spec:
+      containers:
+        - image: PONG/IMAGE_PONG
+          ports:
+            - containerPort: 8081
+          env:
+            - name: POSTGRES_DB
+              value: pongdb
+          envFrom:
+            - secretRef:
+                name: psql-credentials

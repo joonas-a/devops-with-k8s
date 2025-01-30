@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ./pong/manifests/deployment.yaml
+  - ./pong/manifests/secret.yaml
+  - ./pong/manifests/statefulset.yaml
+
+  - ./logs/manifests/deployment.yaml
+  - ./logs/manifests/configmap.yaml
+
+images:
+  - name: PONG/IMAGE_PONG
+    newName: joonasahovalli/pong
+    newTag: 5.0.0
+  - name: LOGGER/IMAGE
+    newName: joonasahovalli/logs
+    newTag: 5.0.0
