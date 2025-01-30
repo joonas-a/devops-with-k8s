@@ -1,0 +1,58 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: psql-backup-cron
+spec:
+  schedule: '0 3 * * *'
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: psql-client
+              image: postgres:17
+              env:
+                - name: PGUSER
+                  valueFrom:
+                    secretKeyRef:
+                      name: psql-credentials
+                      key: POSTGRES_USER
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: psql-credentials
+                      key: POSTGRES_PASSWORD
+                - name: PGHOST
+                  valueFrom:
+                    secretKeyRef:
+                      name: psql-credentials
+                      key: POSTGRES_HOST
+                - name: PGDATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: psql-credentials
+                      key: POSTGRES_DB
+                - name: PGPORT
+                  valueFrom:
+                    secretKeyRef:
+                      name: psql-credentials
+                      key: POSTGRES_PORT
+                - name: ACCESS_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: gcloud-credentials
+                      key: ACCESS_TOKEN
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - |-
+                  apt-get update && apt-get install -y curl && \
+                  export TIMESTAMP=$(date +%Y%m%d%H%M%S) && \
+                  pg_dump > ./pgdump_$TIMESTAMP.sql && \
+                  curl -X POST --data-binary @"./pg_dump$TIMESTAMP.sql" \
+                    -H "Authorization: Bearer $ACCESS_TOKEN" \
+                    -H "Content-Type: application/sql" \
+                    "https://storage.googleapis.com/upload/storage/v1/b/dwk-backup/o?uploadType=media&name=pgdump_$TIMESTAMP.sql"
+
+          restartPolicy: OnFailure

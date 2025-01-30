@@ -1,0 +1,64 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: todos-update-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todos
+  strategy:
+    canary:
+      steps:
+        - setWeight: 100
+
+  template:
+    metadata:
+      labels:
+        app: todos
+
+    spec:
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: project-claim
+      containers:
+        - name: todos
+          image: PROJECT/IMAGE_FRONTEND
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
+          volumeMounts:
+            - name: shared-image
+              mountPath: /usr/src/app/files
+        - name: todo-backend
+          image: PROJECT/IMAGE_BACKEND
+          readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3001
+          livenessProbe:
+            initialDelaySeconds: 20
+            periodSeconds: 5
+            httpGet:
+              path: /healthz
+              port: 3000
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - secretRef:
+                name: psql-credentials
+          env:
+            - name: NATS_URL
+              value: nats://my-nats.project.svc.cluster.local:4222

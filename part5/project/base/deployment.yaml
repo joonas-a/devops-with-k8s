@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todos-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todos
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        linkerd.io/inject: enabled
+      labels:
+        app: todos
+    spec:
+      containers:
+        - image: PROJECT/IMAGE_FRONTEND
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          name: todos
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+          volumeMounts:
+            - mountPath: /usr/src/app/files
+              name: shared-image
+        - envFrom:
+            - secretRef:
+                name: psql-credentials
+          image: PROJECT/IMAGE_BACKEND
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 5
+          name: todo-backend
+          ports:
+            - containerPort: 3001
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3001
+            initialDelaySeconds: 10
+            periodSeconds: 5
+      volumes:
+        - name: shared-image
+          persistentVolumeClaim:
+            claimName: project-claim
