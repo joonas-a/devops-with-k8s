@@ -1,0 +1,10 @@
+OpenShift vs Rancher
+
+- Rancher is open source
+- Rancher is lighter to run due to less "bloat" included
+- Rancher uses regular Kubernetes, and OpenShift uses OKD (very opinionated k8s deployment)
+- Because of that Rancher can be further kustomized to fit specific needs
+- Rancher is easy to get started with but later has less hand holding which can become an issue
+- OpenShift requires an expensive licence to run
+- OpenShift is in the closed Red Hat ecosystem
+- OpenShift offers useful tooling out of the box
